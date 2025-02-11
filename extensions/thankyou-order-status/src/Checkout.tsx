@@ -67,7 +67,7 @@ function Extension() {
   //   getProductCheckoutMessage();
   // }, [])
 
-  // if(!checkoutMessage) return null;
+  // if(! checkoutMessage) return null;
   
   if (editorMode) {
     return (
