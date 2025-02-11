@@ -6,13 +6,11 @@ import {
   View,
   TextBlock,
   useApi,
+  Button,
   useCartLineTarget,
   useSettings,
   useExtensionEditor
 } from "@shopify/ui-extensions-react/checkout";
-
-
-import { useState, useEffect } from 'react';
 
 const thankyouBlock = reactExtension("purchase.thank-you.cart-line-item.render-after", () => (
   <Extension />
@@ -70,7 +68,7 @@ function Extension() {
   // }, [])
 
   // if(!checkoutMessage) return null;
-
+  
   if (editorMode) {
     return (
       <View
@@ -101,6 +99,7 @@ function Extension() {
             <Text key={index}>
               {titleLabel} <Link external={true} to={link}> {buttonLabel} {designLinks.length > 1 ? index + 1 : ""}</Link>
             </Text>
+            
           ))}
         </>
       ) : null}
