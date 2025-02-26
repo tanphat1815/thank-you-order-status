@@ -1,14 +1,20 @@
 import {
   reactExtension,
   BlockStack,
+  Button,
+  Grid,
+  Image,
+  Modal,
+  Popover,
   Text,
   Link,
   View,
   TextBlock,
   useCartLineTarget,
   useSettings,
-  useExtensionEditor,
+  useExtensionEditor
 } from "@shopify/ui-extensions-react/checkout";
+import { useState } from 'react';
 
 const thankyouBlock = reactExtension("purchase.thank-you.cart-line-item.render-after", () => (
   <Extension />
@@ -25,10 +31,8 @@ export { orderStatusBlock }
 function Extension() {
   const settings = useSettings();
   const { attributes } = useCartLineTarget();
-  const titleLabel = settings.title_label ?? 'Download design:'
-  const buttonLabel = settings.button_label ?? 'Link';
-  const isDigital = attributes.some((a) => a.key.toLowerCase().includes("digital") && a.value.trim().toLowerCase() === "yes");
-  const designLinks = attributes.filter(a => a.key.startsWith('_tib_design_link')).map(a => a.value);
+  const buttonLabel = settings.button_label ?? 'Customization edit link';
+  const customizationEditLink = attributes.filter(a => a.key.startsWith('_customization_edit_link')).map(a => a.value);
   const editorMode = !!useExtensionEditor();
 
   if (editorMode) {
@@ -46,7 +50,7 @@ function Extension() {
           <TextBlock
             appearance='info'
           >
-            {`Download button will show up here when an item contains a design`}
+            {`Block extension will show up here when an item contains a customization data`}
           </TextBlock>
         </View>
       </View>
@@ -55,15 +59,15 @@ function Extension() {
 
   return (
     <BlockStack>
-      {isDigital &&  designLinks.length > 0 ? (
+    {customizationEditLink.length > 0 ? (
         <>
-          {designLinks.map((link, index) => (
+          {customizationEditLink.map((link, index) => (
             <Text key={index}>
-              {titleLabel} <Link external={true} to={link}> {buttonLabel} {designLinks.length > 1 ? index + 1 : ""}</Link>
+              <Link external={true} to={link}> {buttonLabel} {customizationEditLink.length > 1 ? index + 1 : ""}</Link>
             </Text>
           ))}
         </>
       ) : null}
-    </BlockStack>
+  </BlockStack>
   )
 }

@@ -6,8 +6,8 @@
 api_version = "2025-01"
 
 [[extensions]]
-name = "Digital Download"
-handle = "digital-download"
+name = "Edit Customization"
+handle = "edit-customization"
 type = "ui_extension"
 
 
@@ -50,17 +50,17 @@ api_access = true
 # your extension. Learn more:
 # https://shopify.dev/docs/api/checkout-ui-extensions/unstable/configuration#settings-definition
 
-[extensions.settings]
-  [[extensions.settings.fields]]
-  key = "title_label"
-  type = "single_line_text_field"
-  name = "Title label"
-  default = "Download design:"
-  description = "If leave empty, \"Download design:\" will be used."
+# [extensions.settings]
+# [[extensions.settings.fields]]
+# key = "banner_title"
+# type = "single_line_text_field"
+# name = "Banner title"
+# description = "Enter a title for the banner"
 
+[extensions.settings]
   [[extensions.settings.fields]]
   key = "button_label"
   type = "single_line_text_field"
   name = "Button label"
   default = "Link"
-  description = "If leave empty, \"Link\" will be used."
+  description = "If leave empty, \"Customization edit link:\" will be used."
