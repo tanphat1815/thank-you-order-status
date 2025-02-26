@@ -3,17 +3,22 @@
 
 # The version of APIs your extension will receive. Learn more:
 # https://shopify.dev/docs/api/usage/versioning
-api_version = "2025-01"
+api_version = "2024-04"
 
 [[extensions]]
-name = "thankyou-order-status"
-handle = "thankyou-order-status"
+name = "Customization Image Preview"
+handle = "customization-image-preview"
 type = "ui_extension"
 
 
 # Controls where in Shopify your extension will be injected,
 # and the file that contains your extension’s source code. Learn more:
 # https://shopify.dev/docs/api/checkout-ui-extensions/unstable/extension-targets-overview
+
+[[extensions.targeting]]
+module = "./src/Checkout.tsx"
+target = "purchase.checkout.cart-line-item.render-after"
+export = "checkoutBlock"
 
 [[extensions.targeting]]
 module = "./src/Checkout.tsx"
@@ -50,24 +55,20 @@ api_access = true
 # your extension. Learn more:
 # https://shopify.dev/docs/api/checkout-ui-extensions/unstable/configuration#settings-definition
 
-# [extensions.settings]
-# [[extensions.settings.fields]]
-# key = "banner_title"
-# type = "single_line_text_field"
-# name = "Banner title"
-# description = "Enter a title for the banner"
-
 [extensions.settings]
-  [[extensions.settings.fields]]
-  key = "title_label"
-  type = "single_line_text_field"
-  name = "Title label"
-  default = "Download design:"
-  description = "If leave empty, \"Download design:\" will be used."
-
   [[extensions.settings.fields]]
   key = "button_label"
   type = "single_line_text_field"
   name = "Button label"
-  default = "Link"
-  description = "If leave empty, \"Link\" will be used."
+  default = "Preview"
+  description = "If leave empty, \"Preview\" will be used."
+
+  [[extensions.settings.fields]]
+  key = "preview_type"
+  type = "single_line_text_field"
+  name = "Preview type"
+  default = "Popover"
+  description = "Display of customization image when clicking preview button. If not select, \"Popup\" will be shown by default."
+    [[extensions.settings.fields.validations]]
+    name = "choices"
+    value = "[\"Popover\", \"Popup\", \"Expansible\"]"
