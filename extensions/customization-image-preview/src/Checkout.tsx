@@ -13,10 +13,24 @@ import {
 } from '@shopify/ui-extensions-react/checkout';
 import { useState } from 'react';
 
-export default reactExtension(
-  'purchase.checkout.cart-line-item.render-after',
-  () => <Extension />,
-);
+const checkoutBlock = reactExtension("purchase.checkout.cart-line-item.render-after", () => (
+  <Extension />
+));
+
+export { checkoutBlock }
+
+const thankyouBlock = reactExtension("purchase.thank-you.cart-line-item.render-after", () => (
+  <Extension />
+));
+
+export { thankyouBlock }
+
+const orderStatusBlock = reactExtension("customer-account.order-status.cart-line-item.render-after", () => (
+  <Extension />
+));
+
+export { orderStatusBlock }
+
 
 function Extension() {
   const { attributes } = useCartLineTarget();
