@@ -12,6 +12,7 @@ import {
   useOrder,
 } from "@shopify/ui-extensions-react/checkout";
 import { useState, useEffect } from "react";
+import { getCustomizationUrl } from "./utils/helpers.js";
 
 const thankyouBlock = reactExtension(
   "purchase.thank-you.cart-line-item.render-after",
@@ -36,11 +37,15 @@ function Extension({ isOrderStatus }) {
   const customizationId = attributes.find((a) => /^_?customization_id$/.test(a.key));
   const editorMode = !!useExtensionEditor();
   const [showButton, setShowButton] = useState(!isOrderStatus);
+  const customizationUrl = getCustomizationUrl({
+    customizationId: customizationId?.value,
+    productId: merchandise.product.id,
+    shop: myshopifyDomain,
+  });
 
   useEffect(() => {
     if (!isOrderStatus || !order?.id) return;
 
-    console.log(merchandise)
     async function getOrderData() {
       try {
         const response = await fetch(
@@ -55,7 +60,7 @@ function Extension({ isOrderStatus }) {
                   fulfillments(first: 1) { 
                     edges { 
                       node { 
-                        status  
+                        status 
                       }
                     }
                   } 
@@ -92,18 +97,18 @@ function Extension({ isOrderStatus }) {
     );
   }
 
-  return (
-    <BlockStack>
-      {customizationId?.value && showButton ? (
+  if (customizationId?.value && showButton) {
+    return (
+      <BlockStack>
         <Text>
           <Link
             external
-            to={`https://customize.teeinblue.com/customize?customization-id=${customizationId.value}&product-id=${merchandise.product.id.replace("gid://shopify/Product/", "")}&shop=${myshopifyDomain}`}
+            to={customizationUrl}
           >
             {buttonLabel}
           </Link>
         </Text>
-      ) : null}
-    </BlockStack>
-  );
+      </BlockStack>
+    );
+  }
 }
