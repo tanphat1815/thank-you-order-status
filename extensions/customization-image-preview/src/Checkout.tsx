@@ -4,6 +4,7 @@ import {
   Image,
   Modal,
   Popover,
+  SkeletonImage,
   TextBlock,
   View,
   reactExtension,
@@ -11,7 +12,7 @@ import {
   useExtensionEditor,
   useSettings,
 } from '@shopify/ui-extensions-react/checkout';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const checkoutBlock = reactExtension("purchase.checkout.cart-line-item.render-after", () => (
   <Extension />
@@ -31,11 +32,12 @@ const orderStatusBlock = reactExtension("customer-account.order-status.cart-line
 
 export { orderStatusBlock }
 
-
 function Extension() {
   const { attributes } = useCartLineTarget();
   const settings = useSettings();
   const [display, setDisplay] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const buttonLabel = settings.button_label ?? 'Preview';
   const previewType = settings.preview_type ?? 'Popup';
   const customizationImagePreview = attributes.find(a => a.key === '_customization_image');
@@ -66,6 +68,36 @@ function Extension() {
     );
   }
 
+  useEffect(() => {
+    if (!customizationImagePreview.value) {
+      setImageError(true);
+      setLoading(false);
+      return;
+    }
+
+    fetch(customizationImagePreview?.value, { method: "HEAD" })
+    .then(response => {
+      if (response.ok) {
+        setImageError(false);
+      } else {
+        setImageError(true);
+      }
+      setLoading(false);
+    })
+    .catch(() => {
+      setImageError(true);
+      setLoading(false);
+    })
+  }, [customizationImagePreview.value]);
+
+  const imageComponent = loading ? (
+    <SkeletonImage blockSize={400} inlineSize={400} />
+  ) : imageError ? (
+    <TextBlock appearance="critical" emphasis="bold" size="medium">Image failed to load.</TextBlock>
+  ) : (
+    <Image source={customizationImagePreview.value} loading="eager" />
+  );
+
   switch (previewType) {
     case 'Expansible':
       return (
@@ -78,7 +110,7 @@ function Extension() {
           >
             {buttonLabel}
           </Button>
-          {display && <Image source={customizationImagePreview.value} loading='eager'></Image>}
+          {display && imageComponent}
         </View >
       );
 
@@ -100,7 +132,7 @@ function Extension() {
                 blockAlignment={'center'}
                 inlineAlignment={'center'}
               >
-                <Image source={customizationImagePreview.value} loading='eager'></Image>
+                {imageComponent}
               </Grid>
             </Modal>
           }
@@ -122,7 +154,7 @@ function Extension() {
               position='inlineStart'
               padding={'base'}
             >
-              <Image source={customizationImagePreview.value} loading='eager'></Image>
+              {imageComponent}
             </Popover>
           }
         >

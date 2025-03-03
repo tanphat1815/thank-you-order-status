@@ -1,14 +1,14 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "502e2e8ae82fc11025a626b33c6598a7"
+client_id = "12e57226faa3a181842b46918ea9f9c0"
 application_url = "https://shopify.dev/apps/default-app-home"
 embedded = true
-name = "phatnt-thankyou-status"
-handle = "phatnt-thankyou-status"
+name = "phatnt local checkout"
+handle = "phatnt-local-checkout"
 
 [build]
 dev_store_url = "my-store-1278.myshopify.com"
-include_config_on_deploy = true
+include_config_on_deploy = false
 
 [webhooks]
 api_version = "2025-01"
