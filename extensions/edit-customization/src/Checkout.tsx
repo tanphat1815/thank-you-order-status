@@ -55,7 +55,7 @@ function Extension({ isOrderStatus }) {
                   fulfillments(first: 1) { 
                     edges { 
                       node { 
-                        status 
+                        status  
                       }
                     }
                   } 
