@@ -62,17 +62,17 @@ function Extension({ isOrderStatusPage }) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              query: `query { 
-                order(id: "${order.id}") { 
-                  cancelledAt 
-                  fulfillments(first: 1) { 
-                    edges { 
-                      node { 
-                        status 
+              query: `query {
+                order(id: "${order.id}") {
+                  cancelledAt
+                  fulfillments(first: 1) {
+                    edges {
+                      node {
+                        status
                       }
                     }
-                  } 
-                } 
+                  }
+                }
               }`,
             }),
           }
