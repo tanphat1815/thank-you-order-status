@@ -6,6 +6,10 @@ embedded = true
 name = "phatnt-local-checkout"
 handle = "phatnt-local-checkout-1"
 
+[build]
+dev_store_url = "phatnt-staging.myshopify.com"
+include_config_on_deploy = true
+
 [webhooks]
 api_version = "2025-01"
 
@@ -18,7 +22,3 @@ redirect_urls = [ "https://example.com/api/auth" ]
 
 [pos]
 embedded = false
-
-[build]
-include_config_on_deploy = true
-dev_store_url = "phatnt-staging.myshopify.com"

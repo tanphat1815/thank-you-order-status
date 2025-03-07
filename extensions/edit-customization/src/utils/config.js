@@ -1,3 +1,3 @@
 export const CONFIG = {
-    customize_base_url: 'https://customize.teeinblue.com/customize'
+    CUSTOMIZE_BASE_URL: 'https://customize.teeinblue.com/customize'
 }
