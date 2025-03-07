@@ -12,35 +12,48 @@ import {
   useOrder,
 } from "@shopify/ui-extensions-react/checkout";
 import { useState, useEffect } from "react";
+import { getCustomizationUrl } from "./utils/helpers.js";
+
+const fetchedOrderIds = new Set();
 
 const thankyouBlock = reactExtension(
   "purchase.thank-you.cart-line-item.render-after",
-  () => <Extension isOrderStatus={false} />
+  () => <Extension isOrderStatusPage={false} />
 );
 
 export { thankyouBlock };
 
 const orderStatusBlock = reactExtension(
   "customer-account.order-status.cart-line-item.render-after",
-  () => <Extension isOrderStatus={true} />
+  () => <Extension isOrderStatusPage={true} />
 );
 
 export { orderStatusBlock };
 
-function Extension({ isOrderStatus }) {
-  const order = isOrderStatus ? useOrder() : null;
+function Extension({ isOrderStatusPage }) {
+  const order = isOrderStatusPage ? useOrder() : null;
   const { myshopifyDomain } = useShop();
   const settings = useSettings();
   const { attributes, merchandise } = useCartLineTarget();
   const buttonLabel = settings.button_label ?? "Customization edit link";
   const customizationId = attributes.find((a) => /^_?customization_id$/.test(a.key));
   const editorMode = !!useExtensionEditor();
-  const [showButton, setShowButton] = useState(!isOrderStatus);
+  const [showButton, setShowButton] = useState(!isOrderStatusPage);
+  const customizationUrl = getCustomizationUrl({
+    customizationId: customizationId?.value,
+    productId: merchandise.product.id,
+    shop: myshopifyDomain,
+  });
 
   useEffect(() => {
-    if (!isOrderStatus || !order?.id) return;
+    if (!isOrderStatusPage || !order?.id) return;
+    if (fetchedOrderIds.has(order.id)) {
+      setShowButton(true);
+      return;
+    }
 
-    console.log(merchandise)
+    fetchedOrderIds.add(order.id);
+
     async function getOrderData() {
       try {
         const response = await fetch(
@@ -92,18 +105,18 @@ function Extension({ isOrderStatus }) {
     );
   }
 
-  return (
-    <BlockStack>
-      {customizationId?.value && showButton ? (
+  if (customizationId?.value && showButton) {
+    return (
+      <BlockStack>
         <Text>
           <Link
             external
-            to={`https://customize.teeinblue.com/customize?customization-id=${customizationId.value}&product-id=${merchandise.product.id.replace("gid://shopify/Product/", "")}&shop=${myshopifyDomain}`}
+            to={customizationUrl}
           >
             {buttonLabel}
           </Link>
         </Text>
-      ) : null}
-    </BlockStack>
-  );
+      </BlockStack>
+    );
+  }
 }

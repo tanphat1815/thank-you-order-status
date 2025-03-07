@@ -1,13 +1,13 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "12e57226faa3a181842b46918ea9f9c0"
-application_url = "https://shopify.dev/apps/default-app-home"
+client_id = "db3e528892a779bae3c11074cb14a320"
+application_url = "https://example.com/"
 embedded = true
-name = "phatnt local checkout"
-handle = "phatnt-local-checkout"
+name = "phatnt-local-checkout"
+handle = "phatnt-local-checkout-1"
 
 [build]
-dev_store_url = "my-store-1278.myshopify.com"
+dev_store_url = "phatnt-staging.myshopify.com"
 include_config_on_deploy = true
 
 [webhooks]
@@ -18,7 +18,7 @@ api_version = "2025-01"
 scopes = "customer_read_orders"
 
 [auth]
-redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
+redirect_urls = [ "https://example.com/api/auth" ]
 
 [pos]
 embedded = false

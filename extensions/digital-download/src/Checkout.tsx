@@ -30,10 +30,10 @@ function Extension() {
   const isDigital = attributes.some((a) => a.key.toLowerCase().includes("digital") && a.value.trim().toLowerCase() === "yes");
   const designLinks = attributes.filter(a => a.key.startsWith('_tib_design_link')).map(a => a.value);
   const editorMode = !!useExtensionEditor();
-   
 
 
-  
+
+
   if (editorMode) {
     return (
       <View
@@ -58,7 +58,7 @@ function Extension() {
 
   return (
     <BlockStack>
-      {isDigital &&  designLinks.length > 0 ? (
+      {isDigital && designLinks.length > 0 ? (
         <>
           {designLinks.map((link, index) => (
             <Text key={index}>
