@@ -1,24 +1,20 @@
-# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+#Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "502e2e8ae82fc11025a626b33c6598a7"
-application_url = "https://shopify.dev/apps/default-app-home"
+client_id = "db3e528892a779bae3c11074cb14a320"
+application_url = "https://example.com/"
 embedded = true
-name = "phatnt-thankyou-status"
-handle = "phatnt-thankyou-status"
-
-[build]
-dev_store_url = "my-store-1278.myshopify.com"
-include_config_on_deploy = true
+name = "phatnt-local-checkout"
+handle = "phatnt-local-checkout-1"
 
 [webhooks]
 api_version = "2025-01"
 
 [access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+#Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "customer_read_orders"
 
 [auth]
-redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
+redirect_urls = [ "https://example.com/api/auth" ]
 
 [pos]
 embedded = false
