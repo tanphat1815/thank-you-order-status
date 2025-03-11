@@ -10,7 +10,6 @@ import {
   useExtensionEditor,
 } from "@shopify/ui-extensions-react/checkout";
 
-// **React Extensions for Thank You Page & Order Status Page**
 const thankyouBlock = reactExtension("purchase.thank-you.cart-line-item.render-after", () => (
   <Extension />
 ));
@@ -23,9 +22,6 @@ const orderStatusBlock = reactExtension("customer-account.order-status.cart-line
 
 export { orderStatusBlock }
 
-// List of attributes that should be ignored from the check
-const EXCLUDED_ATTRIBUTES = ["customization_id", "customization_image", "tib_design_link"];
-
 /** 
  * Converts a comma- or semicolon-separated string into an array.
  * This ensures flexibility in user input formatting.
@@ -35,31 +31,22 @@ const normalizeKeywords = (input = "") =>
 
 /**
  * Checks whether the product matches a custom category (e.g., digital products).
- * It compares both attribute keys and values against user-defined keywords.
+ * It compares both attribute names and values against user-defined keywords.
  */
-const checkIsCustomMatch = (attributes, customKeys, customValues) => {
+const checkIsCustomMatch = (attributes, customNames, customValues) => {
 
   return attributes.some((a) => {
-    const keyLower = a.key.toLowerCase();
+    const nameLower = a.key.toLowerCase();
     const valueLower = a.value.toLowerCase();
 
-    // Skip attributes that contain any of the excluded keywords
-    if (EXCLUDED_ATTRIBUTES.some(keyword => keyLower.includes(keyword))) {
-      console.log(`Skipping Attribute: ${a.key}`);
-      return false;
-    }
-
-    // Create regex patterns for matching keys and values
-    const keyRegex = new RegExp(`\\b(${customKeys.join("|")})\\b`, "i");
+    // Create regex patterns for matching names and values
+    const nameRegex = new RegExp(`\\b(${customNames.join("|")})\\b`, "i");
     const valueRegex = new RegExp(`\\b(${customValues.join("|")})\\b`, "i");
 
-    const keyMatch = keyRegex.test(keyLower);
+    const nameMatch = nameRegex.test(nameLower);
     const valueMatch = valueRegex.test(valueLower);
 
-    console.log(`Checking Attribute: { key: "${a.key}", value: "${a.value}" }`);
-    console.log("Key Match:", keyMatch, "Value Match:", valueMatch);
-
-    return keyMatch && valueMatch;
+    return nameMatch && valueMatch;
   });
 };
 
@@ -70,15 +57,11 @@ function Extension() {
   const settings = useSettings();
   const { attributes } = useCartLineTarget();
   const editorMode = !!useExtensionEditor();
-
-  // Retrieve settings from the theme editor
   const titleLabel = settings.title_label ?? 'Download design:';
-  const buttonLabel = settings.button_label ?? 'Link';
-  const customKeys = normalizeKeywords(String(settings.custom_keys ?? 'digital'));
+  const buttonLabel = settings.button_label ?? 'link';
+  const customNames = normalizeKeywords(String(settings.custom_names ?? 'digital'));
   const customValues = normalizeKeywords(String(settings.custom_values ?? 'yes'));
-
-  // Determine whether the product is categorized as "digital"
-  const isDigital = checkIsCustomMatch(attributes, customKeys, customValues);
+  const isDigital = checkIsCustomMatch(attributes, customNames, customValues);
   const designLinks = attributes.filter(a => a.key.startsWith('_tib_design_link')).map(a => a.value);
 
   // Display a preview message in the Shopify editor mode

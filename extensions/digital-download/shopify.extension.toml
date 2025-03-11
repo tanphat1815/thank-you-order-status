@@ -62,19 +62,19 @@ api_access = true
   key = "button_label"
   type = "single_line_text_field"
   name = "Button label"
-  default = "Link"
-  description = "If leave empty, \"Link\" will be used."
+  default = "link"
+  description = "If leave empty, \"link\" will be used."
 
   [[extensions.settings.fields]]
-  key = "custom_keys"
+  key = "custom_names"
   type = "single_line_text_field"
-  name = "Custom keys (comma separated)"
-  default = "digital, tải digital không"
+  name = "Custom name (comma separated)"
+  default = "digital"
   description = "If leave empty, \"digital\" will be used."
 
   [[extensions.settings.fields]]
   key = "custom_values"
   type = "single_line_text_field"
   name = "Custom values (comma separated)"
-  default = "yes, có"
+  default = "yes"
   description = "If leave empty, \"yes\" will be used."
