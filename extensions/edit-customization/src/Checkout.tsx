@@ -1,8 +1,5 @@
 import {
   reactExtension,
-  BlockStack,
-  Text,
-  Link,
   View,
   TextBlock,
   useCartLineTarget,
@@ -11,10 +8,9 @@ import {
   useShop,
   useOrder,
 } from "@shopify/ui-extensions-react/checkout";
-import { useState, useEffect } from "react";
 import { getCustomizationUrl } from "./utils/helpers.js";
-
-const fetchedOrderIds = new Set();
+import CustomButton from "./components/CustomButton.js";
+import { useOrderStatus } from "./hooks/useOrderStatus";
 
 const thankyouBlock = reactExtension(
   "purchase.thank-you.cart-line-item.render-after",
@@ -36,62 +32,17 @@ function Extension({ isOrderStatusPage }) {
   const settings = useSettings();
   const { attributes, merchandise } = useCartLineTarget();
   const buttonLabel = settings.button_label ?? "Customization edit link";
+  const buttonStyle = settings.button_kind ?? "plain";
+  const buttonSize = settings.button_size ?? "base";
+  const buttonEmphasis = settings.button_emphasis ?? "normal";
   const customizationId = attributes.find((a) => /^_?customization_id$/.test(a.key));
   const editorMode = !!useExtensionEditor();
-  const [showButton, setShowButton] = useState(!isOrderStatusPage);
+  const showButton = isOrderStatusPage ? useOrderStatus(order) : true;
   const customizationUrl = getCustomizationUrl({
     customizationId: customizationId?.value,
     productId: merchandise.product.id,
     shop: myshopifyDomain,
   });
-
-  useEffect(() => {
-    if (!isOrderStatusPage || !order?.id) return;
-    if (fetchedOrderIds.has(order.id)) {
-      setShowButton(true);
-      return;
-    }
-
-    fetchedOrderIds.add(order.id);
-
-    async function getOrderData() {
-      try {
-        const response = await fetch(
-          "shopify://customer-account/api/2025-01/graphql.json",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              query: `query {
-                order(id: "${order.id}") {
-                  cancelledAt
-                  fulfillments(first: 1) {
-                    edges {
-                      node {
-                        status
-                      }
-                    }
-                  }
-                }
-              }`,
-            }),
-          }
-        );
-
-        const result = await response.json();
-        const orderData = result?.data?.order;
-
-        if (orderData?.cancelledAt === null &&
-          orderData?.fulfillments?.edges[0]?.node?.status !== "SUCCESS") {
-          setShowButton(true);
-        }
-      } catch (error) {
-        console.error("Error fetching order data:", error);
-      }
-    }
-
-    getOrderData();
-  }, [order?.id]);
 
   if (editorMode) {
     return (
@@ -107,16 +58,13 @@ function Extension({ isOrderStatusPage }) {
 
   if (customizationId?.value && showButton) {
     return (
-      <BlockStack>
-        <Text>
-          <Link
-            external
-            to={customizationUrl}
-          >
-            {buttonLabel}
-          </Link>
-        </Text>
-      </BlockStack>
+      <CustomButton
+        label={buttonLabel}
+        url={customizationUrl}
+        kind={buttonStyle}
+        emphasis={buttonEmphasis}
+        size={buttonSize}
+      />
     );
   }
 }

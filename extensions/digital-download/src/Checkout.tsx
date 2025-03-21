@@ -40,8 +40,8 @@ const checkIsCustomMatch = (attributes, customNames, customValues) => {
     const valueLower = a.value.toLowerCase();
 
     // Create regex patterns for matching names and values
-    const nameRegex = new RegExp(`\\b(${customNames.join("|")})\\b`, "i");
-    const valueRegex = new RegExp(`\\b(${customValues.join("|")})\\b`, "i");
+    const nameRegex = new RegExp(`(^|[^\\p{L}\\p{N}])(${customNames.join("|")})([^\\p{L}\\p{N}]|$)`, "iu");
+    const valueRegex = new RegExp(`(^|[^\\p{L}\\p{N}])(${customValues.join("|")})([^\\p{L}\\p{N}]|$)`, "iu");
 
     const nameMatch = nameRegex.test(nameLower);
     const valueMatch = valueRegex.test(valueLower);
@@ -56,13 +56,13 @@ const checkIsCustomMatch = (attributes, customNames, customValues) => {
 function Extension() {
   const settings = useSettings();
   const { attributes } = useCartLineTarget();
-  const editorMode = !!useExtensionEditor();
   const titleLabel = settings.title_label ?? 'Download design:';
   const buttonLabel = settings.button_label ?? 'link';
   const customNames = normalizeKeywords(String(settings.custom_names ?? 'digital'));
   const customValues = normalizeKeywords(String(settings.custom_values ?? 'yes'));
   const isDigital = checkIsCustomMatch(attributes, customNames, customValues);
   const designLinks = attributes.filter(a => a.key.startsWith('_tib_design_link')).map(a => a.value);
+  const editorMode = !!useExtensionEditor();
 
   // Display a preview message in the Shopify editor mode
   if (editorMode) {
