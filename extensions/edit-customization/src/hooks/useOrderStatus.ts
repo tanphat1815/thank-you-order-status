@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { 
+  useEffect, 
+  useState, 
+} from "react";
 
 const fetchedOrderIds = new Set();
 
@@ -18,7 +21,7 @@ export function useOrderStatus(order) {
     async function getOrderData() {
       try {
         const response = await fetch(
-          "shopify://customer-account/api/2025-01/graphql.json",
+          `shopify://customer-account/api/2025-01/graphql.json`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -41,7 +44,6 @@ export function useOrderStatus(order) {
 
         const result = await response.json();
         const orderData = result?.data?.order;
-        console.log(orderData)
         if (
           orderData?.cancelledAt === null &&
           orderData?.fulfillments?.edges[0]?.node?.status !== "SUCCESS"

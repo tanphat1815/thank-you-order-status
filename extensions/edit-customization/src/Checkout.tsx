@@ -9,7 +9,7 @@ import {
   useOrder,
 } from "@shopify/ui-extensions-react/checkout";
 import { getCustomizationUrl } from "./utils/helpers.js";
-import CustomButton from "./components/CustomButton.js";
+import CustomButton from "./components/CustomButton";
 import { useOrderStatus } from "./hooks/useOrderStatus";
 
 const thankyouBlock = reactExtension(
@@ -32,7 +32,7 @@ function Extension({ isOrderStatusPage }) {
   const settings = useSettings();
   const { attributes, merchandise } = useCartLineTarget();
   const buttonLabel = settings.button_label ?? "Customization edit link";
-  const buttonStyle = settings.button_kind ?? "plain";
+  const buttonStyle = settings.button_style ?? "plain";
   const buttonSize = settings.button_size ?? "base";
   const buttonEmphasis = settings.button_emphasis ?? "normal";
   const customizationId = attributes.find((a) => /^_?customization_id$/.test(a.key));
@@ -59,11 +59,11 @@ function Extension({ isOrderStatusPage }) {
   if (customizationId?.value && showButton) {
     return (
       <CustomButton
-        label={buttonLabel}
         url={customizationUrl}
-        kind={buttonStyle}
-        emphasis={buttonEmphasis}
-        size={buttonSize}
+        label={String(buttonLabel)}
+        style={String(buttonStyle)}
+        size={String(buttonSize)}
+        emphasis={String(buttonEmphasis)}
       />
     );
   }

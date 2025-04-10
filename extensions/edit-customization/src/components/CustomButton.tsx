@@ -1,5 +1,10 @@
-import React from "react";
-import { Button, Link, Text, BlockStack, InlineLayout } from "@shopify/ui-extensions-react/checkout";
+import {
+  Button,
+  Link,
+  Text,
+  BlockStack,
+  InlineLayout,
+} from "@shopify/ui-extensions-react/checkout";
 
 interface CustomButtonProps {
   url: string;
@@ -26,12 +31,14 @@ const getButtonSize = (size?: string) => {
   switch (size) {
     case "Small":
       return "small";
+    case "Normal":
+      return "base";
     case "Medium":
       return "medium";
     case "Large":
       return "large";
     default:
-      return undefined;
+      return "base";
   }
 };
 
@@ -39,10 +46,12 @@ const getButtonEmphasis = (emphasis?: string) => {
   switch (emphasis) {
     case "Italic":
       return "italic";
+    case "Normal":
+      return "normal";
     case "Bold":
       return "bold";
     default:
-      return undefined;
+      return "normal";
   }
 };
 

@@ -63,14 +63,13 @@ network_access = true
   type = "single_line_text_field"
   name = "Button label"
   default = "Link"
-  description = "If leave empty, \"Customization edit link:\" will be used."
+  description = "If leave empty, \"Customization edit link\" will be used."
 
   [[extensions.settings.fields]]
   key = "button_style"
   type = "single_line_text_field"
   name = "Button style"
   default = "link"
-  description = "If not select, \"link\" will be shown by default."
     [[extensions.settings.fields.validations]]
     name = "choices"
     value = "[\"Underline\", \"Outline\", \"Primary\"]"
@@ -80,7 +79,6 @@ network_access = true
   type = "single_line_text_field"
   name = "Button size"
   default = "Normal"
-  description = "If not select, \"Normal\" will be shown by default."
     [[extensions.settings.fields.validations]]
     name = "choices"
     value = "[\"Small\", \"Normal\", \"Medium\", \"Large\"]"
@@ -90,7 +88,6 @@ network_access = true
   type = "single_line_text_field"
   name = "Button Emphasis"
   default = "Normal"
-  description = "If not select, \"Normal\" will be shown by default."
     [[extensions.settings.fields.validations]]
     name = "choices"
     value = "[\"Italic\", \"Normal\", \"Bold\"]"
